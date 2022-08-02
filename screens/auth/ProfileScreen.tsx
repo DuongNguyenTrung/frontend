@@ -29,7 +29,6 @@ function ProfileScreen({ }: props) {
     //handle
 
     const onFinish = async (values: any) => {
-        console.log(values);
 
         const service = new Client(apiConfig)
         try {

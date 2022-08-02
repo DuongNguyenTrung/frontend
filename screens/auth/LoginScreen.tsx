@@ -56,7 +56,7 @@ function LoginScreen({ }: props) {
                                 <Checkbox>Remember me</Checkbox>
                             </Form.Item>
 
-                            <a className="login-form-forgot" href="">
+                            <a className="login-form-forgot" href="/auth/reset-password">
                                 Forgot password
                             </a>
                         </Form.Item>

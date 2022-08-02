@@ -22,6 +22,128 @@ export class Client extends AuthorizedApiBase {
     }
 
     /**
+     * genToken
+     * @param email (optional) email
+     * @return OK
+     */
+    genTokenUsingGET(email: string | null | undefined): Promise<boolean> {
+        let url_ = this.baseUrl + "/account/refreshtoken?";
+        if (email !== undefined && email !== null)
+            url_ += "email=" + encodeURIComponent("" + email) + "&";
+        url_ = url_.replace(/[?&]$/, "");
+
+        let options_: RequestInit = {
+            method: "GET",
+            headers: {
+                "Accept": "*/*"
+            }
+        };
+
+        return this.transformOptions(options_).then(transformedOptions_ => {
+            return this.http.fetch(url_, transformedOptions_);
+        }).then((_response: Response) => {
+            return this.transformResult(url_, _response, (_response: Response) => this.processGenTokenUsingGET(_response));
+        });
+    }
+
+    protected processGenTokenUsingGET(response: Response): Promise<boolean> {
+        const status = response.status;
+        let _headers: any = {}; if (response.headers && response.headers.forEach) { response.headers.forEach((v: any, k: any) => _headers[k] = v); };
+        if (status === 200) {
+            return response.text().then((_responseText) => {
+                let result200: any = null;
+                let resultData200 = _responseText === "" ? null : JSON.parse(_responseText, this.jsonParseReviver);
+                result200 = resultData200 !== undefined ? resultData200 : <any>null;
+
+                return result200;
+            });
+        } else if (status === 401) {
+            return response.text().then((_responseText) => {
+                return throwException("Unauthorized", status, _responseText, _headers);
+            });
+        } else if (status === 403) {
+            return response.text().then((_responseText) => {
+                return throwException("Forbidden", status, _responseText, _headers);
+            });
+        } else if (status === 404) {
+            return response.text().then((_responseText) => {
+                return throwException("Not Found", status, _responseText, _headers);
+            });
+        } else if (status !== 200 && status !== 204) {
+            return response.text().then((_responseText) => {
+                return throwException("An unexpected server error occurred.", status, _responseText, _headers);
+            });
+        }
+        return Promise.resolve<boolean>(null as any);
+    }
+
+    /**
+     * resetPassword
+     * @param email (optional) email
+     * @param password (optional) password
+     * @param token (optional) token
+     * @return OK
+     */
+    resetPasswordUsingPOST(email: string | null | undefined, password: string | null | undefined, token: string | null | undefined): Promise<boolean> {
+        let url_ = this.baseUrl + "/account/resetpassword?";
+        if (email !== undefined && email !== null)
+            url_ += "email=" + encodeURIComponent("" + email) + "&";
+        if (password !== undefined && password !== null)
+            url_ += "password=" + encodeURIComponent("" + password) + "&";
+        if (token !== undefined && token !== null)
+            url_ += "token=" + encodeURIComponent("" + token) + "&";
+        url_ = url_.replace(/[?&]$/, "");
+
+        let options_: RequestInit = {
+            method: "POST",
+            headers: {
+                "Accept": "*/*"
+            }
+        };
+
+        return this.transformOptions(options_).then(transformedOptions_ => {
+            return this.http.fetch(url_, transformedOptions_);
+        }).then((_response: Response) => {
+            return this.transformResult(url_, _response, (_response: Response) => this.processResetPasswordUsingPOST(_response));
+        });
+    }
+
+    protected processResetPasswordUsingPOST(response: Response): Promise<boolean> {
+        const status = response.status;
+        let _headers: any = {}; if (response.headers && response.headers.forEach) { response.headers.forEach((v: any, k: any) => _headers[k] = v); };
+        if (status === 200) {
+            return response.text().then((_responseText) => {
+                let result200: any = null;
+                let resultData200 = _responseText === "" ? null : JSON.parse(_responseText, this.jsonParseReviver);
+                result200 = resultData200 !== undefined ? resultData200 : <any>null;
+
+                return result200;
+            });
+        } else if (status === 201) {
+            return response.text().then((_responseText) => {
+                return throwException("Created", status, _responseText, _headers);
+            });
+        } else if (status === 401) {
+            return response.text().then((_responseText) => {
+                return throwException("Unauthorized", status, _responseText, _headers);
+            });
+        } else if (status === 403) {
+            return response.text().then((_responseText) => {
+                return throwException("Forbidden", status, _responseText, _headers);
+            });
+        } else if (status === 404) {
+            return response.text().then((_responseText) => {
+                return throwException("Not Found", status, _responseText, _headers);
+            });
+        } else if (status !== 200 && status !== 204) {
+            return response.text().then((_responseText) => {
+                return throwException("An unexpected server error occurred.", status, _responseText, _headers);
+            });
+        }
+        return Promise.resolve<boolean>(null as any);
+    }
+
+    /**
      * updateStatus
      * @param id (optional) id
      * @param status (optional) status
@@ -82,6 +204,133 @@ export class Client extends AuthorizedApiBase {
             });
         }
         return Promise.resolve<boolean>(null as any);
+    }
+
+    /**
+     * verifyToken
+     * @param email (optional) email
+     * @param token (optional) token
+     * @return OK
+     */
+    verifyTokenUsingGET(email: string | null | undefined, token: string | null | undefined): Promise<boolean> {
+        let url_ = this.baseUrl + "/account/verifytoken?";
+        if (email !== undefined && email !== null)
+            url_ += "email=" + encodeURIComponent("" + email) + "&";
+        if (token !== undefined && token !== null)
+            url_ += "token=" + encodeURIComponent("" + token) + "&";
+        url_ = url_.replace(/[?&]$/, "");
+
+        let options_: RequestInit = {
+            method: "GET",
+            headers: {
+                "Accept": "*/*"
+            }
+        };
+
+        return this.transformOptions(options_).then(transformedOptions_ => {
+            return this.http.fetch(url_, transformedOptions_);
+        }).then((_response: Response) => {
+            return this.transformResult(url_, _response, (_response: Response) => this.processVerifyTokenUsingGET(_response));
+        });
+    }
+
+    protected processVerifyTokenUsingGET(response: Response): Promise<boolean> {
+        const status = response.status;
+        let _headers: any = {}; if (response.headers && response.headers.forEach) { response.headers.forEach((v: any, k: any) => _headers[k] = v); };
+        if (status === 200) {
+            return response.text().then((_responseText) => {
+                let result200: any = null;
+                let resultData200 = _responseText === "" ? null : JSON.parse(_responseText, this.jsonParseReviver);
+                result200 = resultData200 !== undefined ? resultData200 : <any>null;
+
+                return result200;
+            });
+        } else if (status === 401) {
+            return response.text().then((_responseText) => {
+                return throwException("Unauthorized", status, _responseText, _headers);
+            });
+        } else if (status === 403) {
+            return response.text().then((_responseText) => {
+                return throwException("Forbidden", status, _responseText, _headers);
+            });
+        } else if (status === 404) {
+            return response.text().then((_responseText) => {
+                return throwException("Not Found", status, _responseText, _headers);
+            });
+        } else if (status !== 200 && status !== 204) {
+            return response.text().then((_responseText) => {
+                return throwException("An unexpected server error occurred.", status, _responseText, _headers);
+            });
+        }
+        return Promise.resolve<boolean>(null as any);
+    }
+
+    /**
+     * getListAttend
+     * @param classId (optional) classId
+     * @param studentId (optional) studentId
+     * @param subjectId (optional) subjectId
+     * @return OK
+     */
+    getListAttendUsingGET(classId: number | null | undefined, studentId: number | null | undefined, subjectId: string | null | undefined): Promise<AttendDTO[]> {
+        let url_ = this.baseUrl + "/api/attendance/list?";
+        if (classId !== undefined && classId !== null)
+            url_ += "classId=" + encodeURIComponent("" + classId) + "&";
+        if (studentId !== undefined && studentId !== null)
+            url_ += "studentId=" + encodeURIComponent("" + studentId) + "&";
+        if (subjectId !== undefined && subjectId !== null)
+            url_ += "subjectId=" + encodeURIComponent("" + subjectId) + "&";
+        url_ = url_.replace(/[?&]$/, "");
+
+        let options_: RequestInit = {
+            method: "GET",
+            headers: {
+                "Accept": "*/*"
+            }
+        };
+
+        return this.transformOptions(options_).then(transformedOptions_ => {
+            return this.http.fetch(url_, transformedOptions_);
+        }).then((_response: Response) => {
+            return this.transformResult(url_, _response, (_response: Response) => this.processGetListAttendUsingGET(_response));
+        });
+    }
+
+    protected processGetListAttendUsingGET(response: Response): Promise<AttendDTO[]> {
+        const status = response.status;
+        let _headers: any = {}; if (response.headers && response.headers.forEach) { response.headers.forEach((v: any, k: any) => _headers[k] = v); };
+        if (status === 200) {
+            return response.text().then((_responseText) => {
+                let result200: any = null;
+                let resultData200 = _responseText === "" ? null : JSON.parse(_responseText, this.jsonParseReviver);
+                if (Array.isArray(resultData200)) {
+                    result200 = [] as any;
+                    for (let item of resultData200)
+                        result200!.push(AttendDTO.fromJS(item));
+                }
+                else {
+                    result200 = <any>null;
+                }
+                return result200;
+            });
+        } else if (status === 401) {
+            return response.text().then((_responseText) => {
+                return throwException("Unauthorized", status, _responseText, _headers);
+            });
+        } else if (status === 403) {
+            return response.text().then((_responseText) => {
+                return throwException("Forbidden", status, _responseText, _headers);
+            });
+        } else if (status === 404) {
+            return response.text().then((_responseText) => {
+                return throwException("Not Found", status, _responseText, _headers);
+            });
+        } else if (status !== 200 && status !== 204) {
+            return response.text().then((_responseText) => {
+                return throwException("An unexpected server error occurred.", status, _responseText, _headers);
+            });
+        }
+        return Promise.resolve<AttendDTO[]>(null as any);
     }
 
     /**
@@ -423,6 +672,136 @@ export class Client extends AuthorizedApiBase {
             });
         }
         return Promise.resolve<any[]>(null as any);
+    }
+
+    /**
+     * getListSubjectByTerm
+     * @param studentId (optional) studentId
+     * @param termId (optional) termId
+     * @return OK
+     */
+    getListSubjectByTermUsingGET(studentId: number | null | undefined, termId: number | null | undefined): Promise<SubjectDTO[]> {
+        let url_ = this.baseUrl + "/api/listsubject?";
+        if (studentId !== undefined && studentId !== null)
+            url_ += "studentId=" + encodeURIComponent("" + studentId) + "&";
+        if (termId !== undefined && termId !== null)
+            url_ += "termId=" + encodeURIComponent("" + termId) + "&";
+        url_ = url_.replace(/[?&]$/, "");
+
+        let options_: RequestInit = {
+            method: "GET",
+            headers: {
+                "Accept": "*/*"
+            }
+        };
+
+        return this.transformOptions(options_).then(transformedOptions_ => {
+            return this.http.fetch(url_, transformedOptions_);
+        }).then((_response: Response) => {
+            return this.transformResult(url_, _response, (_response: Response) => this.processGetListSubjectByTermUsingGET(_response));
+        });
+    }
+
+    protected processGetListSubjectByTermUsingGET(response: Response): Promise<SubjectDTO[]> {
+        const status = response.status;
+        let _headers: any = {}; if (response.headers && response.headers.forEach) { response.headers.forEach((v: any, k: any) => _headers[k] = v); };
+        if (status === 200) {
+            return response.text().then((_responseText) => {
+                let result200: any = null;
+                let resultData200 = _responseText === "" ? null : JSON.parse(_responseText, this.jsonParseReviver);
+                if (Array.isArray(resultData200)) {
+                    result200 = [] as any;
+                    for (let item of resultData200)
+                        result200!.push(SubjectDTO.fromJS(item));
+                }
+                else {
+                    result200 = <any>null;
+                }
+                return result200;
+            });
+        } else if (status === 401) {
+            return response.text().then((_responseText) => {
+                return throwException("Unauthorized", status, _responseText, _headers);
+            });
+        } else if (status === 403) {
+            return response.text().then((_responseText) => {
+                return throwException("Forbidden", status, _responseText, _headers);
+            });
+        } else if (status === 404) {
+            return response.text().then((_responseText) => {
+                return throwException("Not Found", status, _responseText, _headers);
+            });
+        } else if (status !== 200 && status !== 204) {
+            return response.text().then((_responseText) => {
+                return throwException("An unexpected server error occurred.", status, _responseText, _headers);
+            });
+        }
+        return Promise.resolve<SubjectDTO[]>(null as any);
+    }
+
+    /**
+     * getListTerm
+     * @param studentId (optional) studentId
+     * @param termId (optional) termId
+     * @return OK
+     */
+    getListTermUsingGET(studentId: number | null | undefined, termId: number | null | undefined): Promise<Term[]> {
+        let url_ = this.baseUrl + "/api/listterm?";
+        if (studentId !== undefined && studentId !== null)
+            url_ += "studentId=" + encodeURIComponent("" + studentId) + "&";
+        if (termId !== undefined && termId !== null)
+            url_ += "termId=" + encodeURIComponent("" + termId) + "&";
+        url_ = url_.replace(/[?&]$/, "");
+
+        let options_: RequestInit = {
+            method: "GET",
+            headers: {
+                "Accept": "*/*"
+            }
+        };
+
+        return this.transformOptions(options_).then(transformedOptions_ => {
+            return this.http.fetch(url_, transformedOptions_);
+        }).then((_response: Response) => {
+            return this.transformResult(url_, _response, (_response: Response) => this.processGetListTermUsingGET(_response));
+        });
+    }
+
+    protected processGetListTermUsingGET(response: Response): Promise<Term[]> {
+        const status = response.status;
+        let _headers: any = {}; if (response.headers && response.headers.forEach) { response.headers.forEach((v: any, k: any) => _headers[k] = v); };
+        if (status === 200) {
+            return response.text().then((_responseText) => {
+                let result200: any = null;
+                let resultData200 = _responseText === "" ? null : JSON.parse(_responseText, this.jsonParseReviver);
+                if (Array.isArray(resultData200)) {
+                    result200 = [] as any;
+                    for (let item of resultData200)
+                        result200!.push(Term.fromJS(item));
+                }
+                else {
+                    result200 = <any>null;
+                }
+                return result200;
+            });
+        } else if (status === 401) {
+            return response.text().then((_responseText) => {
+                return throwException("Unauthorized", status, _responseText, _headers);
+            });
+        } else if (status === 403) {
+            return response.text().then((_responseText) => {
+                return throwException("Forbidden", status, _responseText, _headers);
+            });
+        } else if (status === 404) {
+            return response.text().then((_responseText) => {
+                return throwException("Not Found", status, _responseText, _headers);
+            });
+        } else if (status !== 200 && status !== 204) {
+            return response.text().then((_responseText) => {
+                return throwException("An unexpected server error occurred.", status, _responseText, _headers);
+            });
+        }
+        return Promise.resolve<Term[]>(null as any);
     }
 
     /**
@@ -1761,6 +2140,50 @@ export interface IAccountDTO {
     status?: number | undefined;
 }
 
+export class AttendDTO implements IAttendDTO {
+    day?: string | undefined;
+    slot?: number | undefined;
+    status?: number | undefined;
+
+    constructor(data?: IAttendDTO) {
+        if (data) {
+            for (var property in data) {
+                if (data.hasOwnProperty(property))
+                    (<any>this)[property] = (<any>data)[property];
+            }
+        }
+    }
+
+    init(_data?: any) {
+        if (_data) {
+            this.day = _data["day"];
+            this.slot = _data["slot"];
+            this.status = _data["status"];
+        }
+    }
+
+    static fromJS(data: any): AttendDTO {
+        data = typeof data === 'object' ? data : {};
+        let result = new AttendDTO();
+        result.init(data);
+        return result;
+    }
+
+    toJSON(data?: any) {
+        data = typeof data === 'object' ? data : {};
+        data["day"] = this.day;
+        data["slot"] = this.slot;
+        data["status"] = this.status;
+        return data;
+    }
+}
+
+export interface IAttendDTO {
+    day?: string | undefined;
+    slot?: number | undefined;
+    status?: number | undefined;
+}
+
 export class AttendStudent implements IAttendStudent {
     attendId?: number | undefined;
     avatar?: string | undefined;
@@ -2187,6 +2610,102 @@ export interface IStudent {
     phone?: string | undefined;
     studentCode?: string | undefined;
     studentId?: number | undefined;
+}
+
+export class SubjectDTO implements ISubjectDTO {
+    className?: string | undefined;
+    des?: string | undefined;
+    subjectId?: string | undefined;
+
+    constructor(data?: ISubjectDTO) {
+        if (data) {
+            for (var property in data) {
+                if (data.hasOwnProperty(property))
+                    (<any>this)[property] = (<any>data)[property];
+            }
+        }
+    }
+
+    init(_data?: any) {
+        if (_data) {
+            this.className = _data["className"];
+            this.des = _data["des"];
+            this.subjectId = _data["subjectId"];
+        }
+    }
+
+    static fromJS(data: any): SubjectDTO {
+        data = typeof data === 'object' ? data : {};
+        let result = new SubjectDTO();
+        result.init(data);
+        return result;
+    }
+
+    toJSON(data?: any) {
+        data = typeof data === 'object' ? data : {};
+        data["className"] = this.className;
+        data["des"] = this.des;
+        data["subjectId"] = this.subjectId;
+        return data;
+    }
+}
+
+export interface ISubjectDTO {
+    className?: string | undefined;
+    des?: string | undefined;
+    subjectId?: string | undefined;
+}
+
+export class Term implements ITerm {
+    termEnd?: string | undefined;
+    termName?: string | undefined;
+    termStart?: string | undefined;
+    term_id?: number | undefined;
+    year?: string | undefined;
+
+    constructor(data?: ITerm) {
+        if (data) {
+            for (var property in data) {
+                if (data.hasOwnProperty(property))
+                    (<any>this)[property] = (<any>data)[property];
+            }
+        }
+    }
+
+    init(_data?: any) {
+        if (_data) {
+            this.termEnd = _data["termEnd"];
+            this.termName = _data["termName"];
+            this.termStart = _data["termStart"];
+            this.term_id = _data["term_id"];
+            this.year = _data["year"];
+        }
+    }
+
+    static fromJS(data: any): Term {
+        data = typeof data === 'object' ? data : {};
+        let result = new Term();
+        result.init(data);
+        return result;
+    }
+
+    toJSON(data?: any) {
+        data = typeof data === 'object' ? data : {};
+        data["termEnd"] = this.termEnd;
+        data["termName"] = this.termName;
+        data["termStart"] = this.termStart;
+        data["term_id"] = this.term_id;
+        data["year"] = this.year;
+        return data;
+    }
+}
+
+export interface ITerm {
+    termEnd?: string | undefined;
+    termName?: string | undefined;
+    termStart?: string | undefined;
+    term_id?: number | undefined;
+    year?: string | undefined;
 }
 
 export class TokenRes implements ITokenRes {
