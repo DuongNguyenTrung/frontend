@@ -741,16 +741,10 @@ export class Client extends AuthorizedApiBase {
 
     /**
      * getListTerm
-     * @param studentId (optional) studentId
-     * @param termId (optional) termId
      * @return OK
      */
-    getListTermUsingGET(studentId: number | null | undefined, termId: number | null | undefined): Promise<Term[]> {
-        let url_ = this.baseUrl + "/api/listterm?";
-        if (studentId !== undefined && studentId !== null)
-            url_ += "studentId=" + encodeURIComponent("" + studentId) + "&";
-        if (termId !== undefined && termId !== null)
-            url_ += "termId=" + encodeURIComponent("" + termId) + "&";
+    getListTermUsingGET(): Promise<Term[]> {
+        let url_ = this.baseUrl + "/api/listterm";
         url_ = url_.replace(/[?&]$/, "");
 
         let options_: RequestInit = {
@@ -1211,44 +1205,35 @@ export class Client extends AuthorizedApiBase {
     }
 
     /**
-     * error
+     * errorHtml
      * @return OK
      */
-    errorUsingGET(): Promise<{ [key: string]: any; }> {
+    errorHtmlUsingGET(): Promise<ModelAndView> {
         let url_ = this.baseUrl + "/error";
         url_ = url_.replace(/[?&]$/, "");
 
         let options_: RequestInit = {
             method: "GET",
             headers: {
-                "Accept": "*/*"
+                "Accept": "text/html"
             }
         };
 
         return this.transformOptions(options_).then(transformedOptions_ => {
             return this.http.fetch(url_, transformedOptions_);
         }).then((_response: Response) => {
-            return this.transformResult(url_, _response, (_response: Response) => this.processErrorUsingGET(_response));
+            return this.transformResult(url_, _response, (_response: Response) => this.processErrorHtmlUsingGET(_response));
         });
     }
 
-    protected processErrorUsingGET(response: Response): Promise<{ [key: string]: any; }> {
+    protected processErrorHtmlUsingGET(response: Response): Promise<ModelAndView> {
         const status = response.status;
         let _headers: any = {}; if (response.headers && response.headers.forEach) { response.headers.forEach((v: any, k: any) => _headers[k] = v); };
         if (status === 200) {
             return response.text().then((_responseText) => {
                 let result200: any = null;
                 let resultData200 = _responseText === "" ? null : JSON.parse(_responseText, this.jsonParseReviver);
-                if (resultData200) {
-                    result200 = {} as any;
-                    for (let key in resultData200) {
-                        if (resultData200.hasOwnProperty(key))
-                            (<any>result200)![key] = resultData200[key] !== undefined ? resultData200[key] : <any>null;
-                    }
-                }
-                else {
-                    result200 = <any>null;
-                }
+                result200 = ModelAndView.fromJS(resultData200);
                 return result200;
             });
         } else if (status === 401) {
@@ -1268,48 +1253,39 @@ export class Client extends AuthorizedApiBase {
                 return throwException("An unexpected server error occurred.", status, _responseText, _headers);
             });
         }
-        return Promise.resolve<{ [key: string]: any; }>(null as any);
+        return Promise.resolve<ModelAndView>(null as any);
     }
 
     /**
-     * error
+     * errorHtml
      * @return OK
      */
-    errorUsingHEAD(): Promise<{ [key: string]: any; }> {
+    errorHtmlUsingHEAD(): Promise<ModelAndView> {
         let url_ = this.baseUrl + "/error";
         url_ = url_.replace(/[?&]$/, "");
 
         let options_: RequestInit = {
             method: "HEAD",
             headers: {
-                "Accept": "*/*"
+                "Accept": "text/html"
             }
         };
 
         return this.transformOptions(options_).then(transformedOptions_ => {
             return this.http.fetch(url_, transformedOptions_);
         }).then((_response: Response) => {
-            return this.transformResult(url_, _response, (_response: Response) => this.processErrorUsingHEAD(_response));
+            return this.transformResult(url_, _response, (_response: Response) => this.processErrorHtmlUsingHEAD(_response));
         });
     }
 
-    protected processErrorUsingHEAD(response: Response): Promise<{ [key: string]: any; }> {
+    protected processErrorHtmlUsingHEAD(response: Response): Promise<ModelAndView> {
         const status = response.status;
         let _headers: any = {}; if (response.headers && response.headers.forEach) { response.headers.forEach((v: any, k: any) => _headers[k] = v); };
         if (status === 200) {
             return response.text().then((_responseText) => {
                 let result200: any = null;
                 let resultData200 = _responseText === "" ? null : JSON.parse(_responseText, this.jsonParseReviver);
-                if (resultData200) {
-                    result200 = {} as any;
-                    for (let key in resultData200) {
-                        if (resultData200.hasOwnProperty(key))
-                            (<any>result200)![key] = resultData200[key] !== undefined ? resultData200[key] : <any>null;
-                    }
-                }
-                else {
-                    result200 = <any>null;
-                }
+                result200 = ModelAndView.fromJS(resultData200);
                 return result200;
             });
         } else if (status === 204) {
@@ -1329,48 +1305,39 @@ export class Client extends AuthorizedApiBase {
                 return throwException("An unexpected server error occurred.", status, _responseText, _headers);
             });
         }
-        return Promise.resolve<{ [key: string]: any; }>(null as any);
+        return Promise.resolve<ModelAndView>(null as any);
     }
 
     /**
-     * error
+     * errorHtml
      * @return OK
      */
-    errorUsingPOST(): Promise<{ [key: string]: any; }> {
+    errorHtmlUsingPOST(): Promise<ModelAndView> {
         let url_ = this.baseUrl + "/error";
         url_ = url_.replace(/[?&]$/, "");
 
         let options_: RequestInit = {
             method: "POST",
             headers: {
-                "Accept": "*/*"
+                "Accept": "text/html"
             }
         };
 
         return this.transformOptions(options_).then(transformedOptions_ => {
             return this.http.fetch(url_, transformedOptions_);
         }).then((_response: Response) => {
-            return this.transformResult(url_, _response, (_response: Response) => this.processErrorUsingPOST(_response));
+            return this.transformResult(url_, _response, (_response: Response) => this.processErrorHtmlUsingPOST(_response));
         });
     }
 
-    protected processErrorUsingPOST(response: Response): Promise<{ [key: string]: any; }> {
+    protected processErrorHtmlUsingPOST(response: Response): Promise<ModelAndView> {
         const status = response.status;
         let _headers: any = {}; if (response.headers && response.headers.forEach) { response.headers.forEach((v: any, k: any) => _headers[k] = v); };
         if (status === 200) {
             return response.text().then((_responseText) => {
                 let result200: any = null;
                 let resultData200 = _responseText === "" ? null : JSON.parse(_responseText, this.jsonParseReviver);
-                if (resultData200) {
-                    result200 = {} as any;
-                    for (let key in resultData200) {
-                        if (resultData200.hasOwnProperty(key))
-                            (<any>result200)![key] = resultData200[key] !== undefined ? resultData200[key] : <any>null;
-                    }
-                }
-                else {
-                    result200 = <any>null;
-                }
+                result200 = ModelAndView.fromJS(resultData200);
                 return result200;
             });
         } else if (status === 201) {
@@ -1394,48 +1361,39 @@ export class Client extends AuthorizedApiBase {
                 return throwException("An unexpected server error occurred.", status, _responseText, _headers);
             });
         }
-        return Promise.resolve<{ [key: string]: any; }>(null as any);
+        return Promise.resolve<ModelAndView>(null as any);
     }
 
     /**
-     * error
+     * errorHtml
      * @return OK
      */
-    errorUsingPUT(): Promise<{ [key: string]: any; }> {
+    errorHtmlUsingPUT(): Promise<ModelAndView> {
         let url_ = this.baseUrl + "/error";
         url_ = url_.replace(/[?&]$/, "");
 
         let options_: RequestInit = {
             method: "PUT",
             headers: {
-                "Accept": "*/*"
+                "Accept": "text/html"
             }
         };
 
         return this.transformOptions(options_).then(transformedOptions_ => {
             return this.http.fetch(url_, transformedOptions_);
         }).then((_response: Response) => {
-            return this.transformResult(url_, _response, (_response: Response) => this.processErrorUsingPUT(_response));
+            return this.transformResult(url_, _response, (_response: Response) => this.processErrorHtmlUsingPUT(_response));
         });
     }
 
-    protected processErrorUsingPUT(response: Response): Promise<{ [key: string]: any; }> {
+    protected processErrorHtmlUsingPUT(response: Response): Promise<ModelAndView> {
         const status = response.status;
         let _headers: any = {}; if (response.headers && response.headers.forEach) { response.headers.forEach((v: any, k: any) => _headers[k] = v); };
         if (status === 200) {
             return response.text().then((_responseText) => {
                 let result200: any = null;
                 let resultData200 = _responseText === "" ? null : JSON.parse(_responseText, this.jsonParseReviver);
-                if (resultData200) {
-                    result200 = {} as any;
-                    for (let key in resultData200) {
-                        if (resultData200.hasOwnProperty(key))
-                            (<any>result200)![key] = resultData200[key] !== undefined ? resultData200[key] : <any>null;
-                    }
-                }
-                else {
-                    result200 = <any>null;
-                }
+                result200 = ModelAndView.fromJS(resultData200);
                 return result200;
             });
         } else if (status === 201) {
@@ -1459,48 +1417,39 @@ export class Client extends AuthorizedApiBase {
                 return throwException("An unexpected server error occurred.", status, _responseText, _headers);
             });
         }
-        return Promise.resolve<{ [key: string]: any; }>(null as any);
+        return Promise.resolve<ModelAndView>(null as any);
     }
 
     /**
-     * error
+     * errorHtml
      * @return OK
      */
-    errorUsingDELETE(): Promise<{ [key: string]: any; }> {
+    errorHtmlUsingDELETE(): Promise<ModelAndView> {
         let url_ = this.baseUrl + "/error";
         url_ = url_.replace(/[?&]$/, "");
 
         let options_: RequestInit = {
             method: "DELETE",
             headers: {
-                "Accept": "*/*"
+                "Accept": "text/html"
             }
         };
 
         return this.transformOptions(options_).then(transformedOptions_ => {
             return this.http.fetch(url_, transformedOptions_);
         }).then((_response: Response) => {
-            return this.transformResult(url_, _response, (_response: Response) => this.processErrorUsingDELETE(_response));
+            return this.transformResult(url_, _response, (_response: Response) => this.processErrorHtmlUsingDELETE(_response));
         });
     }
 
-    protected processErrorUsingDELETE(response: Response): Promise<{ [key: string]: any; }> {
+    protected processErrorHtmlUsingDELETE(response: Response): Promise<ModelAndView> {
         const status = response.status;
         let _headers: any = {}; if (response.headers && response.headers.forEach) { response.headers.forEach((v: any, k: any) => _headers[k] = v); };
         if (status === 200) {
             return response.text().then((_responseText) => {
                 let result200: any = null;
                 let resultData200 = _responseText === "" ? null : JSON.parse(_responseText, this.jsonParseReviver);
-                if (resultData200) {
-                    result200 = {} as any;
-                    for (let key in resultData200) {
-                        if (resultData200.hasOwnProperty(key))
-                            (<any>result200)![key] = resultData200[key] !== undefined ? resultData200[key] : <any>null;
-                    }
-                }
-                else {
-                    result200 = <any>null;
-                }
+                result200 = ModelAndView.fromJS(resultData200);
                 return result200;
             });
         } else if (status === 204) {
@@ -1520,48 +1469,39 @@ export class Client extends AuthorizedApiBase {
                 return throwException("An unexpected server error occurred.", status, _responseText, _headers);
             });
         }
-        return Promise.resolve<{ [key: string]: any; }>(null as any);
+        return Promise.resolve<ModelAndView>(null as any);
     }
 
     /**
-     * error
+     * errorHtml
      * @return OK
      */
-    errorUsingOPTIONS(): Promise<{ [key: string]: any; }> {
+    errorHtmlUsingOPTIONS(): Promise<ModelAndView> {
         let url_ = this.baseUrl + "/error";
         url_ = url_.replace(/[?&]$/, "");
 
         let options_: RequestInit = {
             method: "OPTIONS",
             headers: {
-                "Accept": "*/*"
+                "Accept": "text/html"
             }
         };
 
         return this.transformOptions(options_).then(transformedOptions_ => {
             return this.http.fetch(url_, transformedOptions_);
         }).then((_response: Response) => {
-            return this.transformResult(url_, _response, (_response: Response) => this.processErrorUsingOPTIONS(_response));
+            return this.transformResult(url_, _response, (_response: Response) => this.processErrorHtmlUsingOPTIONS(_response));
         });
     }
 
-    protected processErrorUsingOPTIONS(response: Response): Promise<{ [key: string]: any; }> {
+    protected processErrorHtmlUsingOPTIONS(response: Response): Promise<ModelAndView> {
         const status = response.status;
         let _headers: any = {}; if (response.headers && response.headers.forEach) { response.headers.forEach((v: any, k: any) => _headers[k] = v); };
         if (status === 200) {
             return response.text().then((_responseText) => {
                 let result200: any = null;
                 let resultData200 = _responseText === "" ? null : JSON.parse(_responseText, this.jsonParseReviver);
-                if (resultData200) {
-                    result200 = {} as any;
-                    for (let key in resultData200) {
-                        if (resultData200.hasOwnProperty(key))
-                            (<any>result200)![key] = resultData200[key] !== undefined ? resultData200[key] : <any>null;
-                    }
-                }
-                else {
-                    result200 = <any>null;
-                }
+                result200 = ModelAndView.fromJS(resultData200);
                 return result200;
             });
         } else if (status === 204) {
@@ -1581,48 +1521,39 @@ export class Client extends AuthorizedApiBase {
                 return throwException("An unexpected server error occurred.", status, _responseText, _headers);
             });
         }
-        return Promise.resolve<{ [key: string]: any; }>(null as any);
+        return Promise.resolve<ModelAndView>(null as any);
     }
 
     /**
-     * error
+     * errorHtml
      * @return OK
      */
-    errorUsingPATCH(): Promise<{ [key: string]: any; }> {
+    errorHtmlUsingPATCH(): Promise<ModelAndView> {
         let url_ = this.baseUrl + "/error";
         url_ = url_.replace(/[?&]$/, "");
 
         let options_: RequestInit = {
             method: "PATCH",
             headers: {
-                "Accept": "*/*"
+                "Accept": "text/html"
             }
         };
 
         return this.transformOptions(options_).then(transformedOptions_ => {
             return this.http.fetch(url_, transformedOptions_);
         }).then((_response: Response) => {
-            return this.transformResult(url_, _response, (_response: Response) => this.processErrorUsingPATCH(_response));
+            return this.transformResult(url_, _response, (_response: Response) => this.processErrorHtmlUsingPATCH(_response));
         });
     }
 
-    protected processErrorUsingPATCH(response: Response): Promise<{ [key: string]: any; }> {
+    protected processErrorHtmlUsingPATCH(response: Response): Promise<ModelAndView> {
         const status = response.status;
         let _headers: any = {}; if (response.headers && response.headers.forEach) { response.headers.forEach((v: any, k: any) => _headers[k] = v); };
         if (status === 200) {
             return response.text().then((_responseText) => {
                 let result200: any = null;
                 let resultData200 = _responseText === "" ? null : JSON.parse(_responseText, this.jsonParseReviver);
-                if (resultData200) {
-                    result200 = {} as any;
-                    for (let key in resultData200) {
-                        if (resultData200.hasOwnProperty(key))
-                            (<any>result200)![key] = resultData200[key] !== undefined ? resultData200[key] : <any>null;
-                    }
-                }
-                else {
-                    result200 = <any>null;
-                }
+                result200 = ModelAndView.fromJS(resultData200);
                 return result200;
             });
         } else if (status === 204) {
@@ -1642,7 +1573,7 @@ export class Client extends AuthorizedApiBase {
                 return throwException("An unexpected server error occurred.", status, _responseText, _headers);
             });
         }
-        return Promise.resolve<{ [key: string]: any; }>(null as any);
+        return Promise.resolve<ModelAndView>(null as any);
     }
 
     /**
@@ -2613,6 +2544,7 @@ export interface IStudent {
 }
 
 export class SubjectDTO implements ISubjectDTO {
+    classId?: string | undefined;
     className?: string | undefined;
     des?: string | undefined;
     subjectId?: string | undefined;
@@ -2628,6 +2560,7 @@ export class SubjectDTO implements ISubjectDTO {
 
     init(_data?: any) {
         if (_data) {
+            this.classId = _data["classId"];
             this.className = _data["className"];
             this.des = _data["des"];
             this.subjectId = _data["subjectId"];
@@ -2643,6 +2576,7 @@ export class SubjectDTO implements ISubjectDTO {
 
     toJSON(data?: any) {
         data = typeof data === 'object' ? data : {};
+        data["classId"] = this.classId;
         data["className"] = this.className;
         data["des"] = this.des;
         data["subjectId"] = this.subjectId;
@@ -2651,6 +2585,7 @@ export class SubjectDTO implements ISubjectDTO {
 }
 
 export interface ISubjectDTO {
+    classId?: string | undefined;
     className?: string | undefined;
     des?: string | undefined;
     subjectId?: string | undefined;
@@ -2658,9 +2593,9 @@ export interface ISubjectDTO {
 
 export class Term implements ITerm {
     termEnd?: string | undefined;
+    termId?: number | undefined;
     termName?: string | undefined;
     termStart?: string | undefined;
-    term_id?: number | undefined;
     year?: string | undefined;
 
     constructor(data?: ITerm) {
@@ -2675,9 +2610,9 @@ export class Term implements ITerm {
     init(_data?: any) {
         if (_data) {
             this.termEnd = _data["termEnd"];
+            this.termId = _data["termId"];
             this.termName = _data["termName"];
             this.termStart = _data["termStart"];
-            this.term_id = _data["term_id"];
             this.year = _data["year"];
         }
     }
@@ -2692,9 +2627,9 @@ export class Term implements ITerm {
     toJSON(data?: any) {
         data = typeof data === 'object' ? data : {};
         data["termEnd"] = this.termEnd;
+        data["termId"] = this.termId;
         data["termName"] = this.termName;
         data["termStart"] = this.termStart;
-        data["term_id"] = this.term_id;
         data["year"] = this.year;
         return data;
     }
@@ -2702,9 +2637,9 @@ export class Term implements ITerm {
 
 export interface ITerm {
     termEnd?: string | undefined;
+    termId?: number | undefined;
     termName?: string | undefined;
     termStart?: string | undefined;
-    term_id?: number | undefined;
     year?: string | undefined;
 }
 

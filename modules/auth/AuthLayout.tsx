@@ -70,11 +70,15 @@ function AuthLayout({ children }: props) {
                         <Menu.Item onClick={() => Router.push("/student/schedule")} key="/student/schedule" icon={<FcPlanner />} >
                             {t('student.schedule')}
                         </Menu.Item>
+                        <Menu.Item onClick={() => Router.push("/student/view-attendance")} key="/teacher/view-attendance" icon={<FcPlanner />} >
+                            View Attendance
+                        </Menu.Item>
                     </SubMenu>
                     <SubMenu icon={<BiBriefcase />} title={t('menu.teacher')}>
                         <Menu.Item onClick={() => Router.push("/teacher/check-attendance")} key="/teacher/check-attendance" icon={<FcPlanner />} >
                             Check Attendance
                         </Menu.Item>
+
                     </SubMenu>
                     <SubMenu icon={<BiWallet />} title={t('menu.admin')}>
                         <Menu.Item onClick={() => Router.push("/admin/account-management")} key="/admin/account-management" icon={<FcPlanner />} >
